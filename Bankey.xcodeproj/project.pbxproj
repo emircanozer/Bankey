@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E39B5DE42F4D7A6700A77530 /* Exceptions for "Bankey" folder in "Bankey" target */ = {
+		E39B5E602F4E5A2600A77530 /* Exceptions for "Bankey" folder in "Bankey" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -21,10 +21,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		E39B5DDD2F4D7A6700A77530 /* Bankey */ = {
+		E39B5E562F4E5A2600A77530 /* Bankey */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E39B5DE42F4D7A6700A77530 /* Exceptions for "Bankey" folder in "Bankey" target */,
+				E39B5E602F4E5A2600A77530 /* Exceptions for "Bankey" folder in "Bankey" target */,
 			);
 			path = Bankey;
 			sourceTree = "<group>";
@@ -45,7 +45,7 @@
 		E3D0F0EB2F4C67CA00E8681F = {
 			isa = PBXGroup;
 			children = (
-				E39B5DDD2F4D7A6700A77530 /* Bankey */,
+				E39B5E562F4E5A2600A77530 /* Bankey */,
 				E3D0F0F52F4C67CA00E8681F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,7 +74,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				E39B5DDD2F4D7A6700A77530 /* Bankey */,
+				E39B5E562F4E5A2600A77530 /* Bankey */,
 			);
 			name = Bankey;
 			packageProductDependencies = (

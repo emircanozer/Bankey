@@ -4,6 +4,22 @@
 
 import UIKit
 
+
+// protokolü tanımladık anyobject only for class
+// Login ekranı bir "olayı" (Event) duyurur, SceneDelegate ise bu olaya karşılık bir "aksiyon" (Action) alır.
+protocol LoginViewControllerDelegate : AnyObject {
+    func didLogin()
+        
+    
+}
+
+//aynı şekilde logout için protokol işler bu şekilde işliyor 
+protocol LogoutDelegate: AnyObject {
+    func didLogout()
+}
+
+
+
 // değişmeyecek komponentler ve ui harici tanımlamaları bu sayfada yaptık
 
 class LoginViewController: UIViewController {
@@ -14,6 +30,10 @@ class LoginViewController: UIViewController {
     let signInButton = UIButton(type: .system)
     let errorMessageLabel = UILabel()
     
+    // delegateimizi tanımladık event olacak fonksiyonun sınıfında tanımlanır her zaman delegate değişkeni  weak retain cycle olmasın diye
+    weak var delegate : LoginViewControllerDelegate?
+    
+   
     
     //Bu sadece bir kısayol tanımlıyor. Artık her yerde username yazınca otomatik olarak loginView.usernameTextField.text'e gidiyor ve değeri getiriyor.
     //Değeri saklamıyor, her çağrıldığında gidip textfield'dan okuyor. Kullanıcı bir şey yazdıysa onu getiriyor, sildiyse boş getiriyor. Hep güncel.
@@ -126,8 +146,11 @@ extension LoginViewController {
             return
         }
         
-        if username == "" && password == "" {
+        if username == "BA" && password == "BA" {
             signInButton.configuration?.showsActivityIndicator = true
+            //protokolün fonksiyonunu burada çağırdık event gerçekleşince scene delegate haber gidiyor giriş yapıldı aksiyonu verebilirsin 
+            delegate?.didLogin()
+            
         } else {
             configureView(withMessage: "Incorrect username / password")
         }

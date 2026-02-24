@@ -3,13 +3,52 @@
 //  Bankey
 //
 //  Created by Emircan Özer on 23.02.2026.
-//
+//sayfa geçişleri navigate işlemleri tab, gibi işlemler sceneden yönetiliyor
 
 import UIKit
+
+
+//sceneDelegate uygulamanın yöneticisi olduğu için butona basıldığında uygulama genelinde verilecek aksiyonu burada tanımladık burası belirliyor. extention olması kodların temiz olmasından dolayı,event olacak fonksiyonu burada tanımladık aşağıda da = self yaptık haberlşeme tamamlanması için
+//Login ekranı bir "olayı" (Event) duyurur, SceneDelegate ise bu olaya karşılık bir "aksiyon" (Action) alır.
+extension SceneDelegate: LoginViewControllerDelegate {
+    func didLogin() {
+        if LocalState.hasOnboarded {
+            setRootViewController(dummyViewController)
+        } else {
+            setRootViewController(onboardingContainerViewController)
+        }
+    }
+}
+
+// buprotokolde de  aynı işlemler onboarding bitince de geçerli event atılır burası aksiyon verir
+extension SceneDelegate : OnboardingContainerViewControllerDelegate {
+    func DidFinishOnboarding() {
+        LocalState.hasOnboarded = true
+        setRootViewController(dummyViewController)
+    }
+    
+    
+}
+
+extension SceneDelegate: LogoutDelegate {
+    func didLogout() {
+        setRootViewController(loginViewController)
+    }
+}
+
+
+
+
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+    
+    let loginViewController = LoginViewController()
+    let onboardingContainerViewController = OnboardingContainerViewController()
+    let dummyViewController = DummyViewController()
+    
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -19,9 +58,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        
         var window = UIWindow(windowScene: windowScene)
         
-        let rootVC = OnboardingContainerViewController()
+        
+        // protokollerin bağlanması için bu tanımlama şart !
+        loginViewController.delegate = self
+        onboardingContainerViewController.delegate = self
+        dummyViewController.logoutDelegate = self
+        
+        
+        let rootVC = loginViewController
         let navigationController = UINavigationController(rootViewController: rootVC)
         window.rootViewController = navigationController
         
@@ -30,12 +77,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
         window.backgroundColor = .systemBackground
         
-        
-        
-        
-        
-        
-        
+  
         
     }
 
@@ -69,4 +111,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
+
+//animasyon için
+extension SceneDelegate {
+    
+    func setRootViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard animated, let window = self.window else {
+            self.window?.rootViewController = vc
+            self.window?.makeKeyAndVisible()
+            return
+        }
+
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(with: window,
+                          duration: 0.3,
+                          options: .transitionCrossDissolve,
+                          animations: nil,
+                          completion: nil)
+    }
+}
+
+
 

@@ -7,16 +7,24 @@
 
 import UIKit
 
+
+//protokol tanımladık
+// buprotokolde de  aynı işlemler onboarding bitince de geçerli event atılır burası aksiyon verir
+
+protocol OnboardingContainerViewControllerDelegate: AnyObject {
+    func DidFinishOnboarding()
+}
+
 //main container tüm sistemi yöneten class
 class OnboardingContainerViewController: UIViewController {
 
     let pageViewController: UIPageViewController //scrollable,kalbi
     var pages = [UIViewController]()
-    var currentVC: UIViewController {
-        //bir property'nin değeri her değiştiğinde otomatik çalışan blok.
-        didSet {
-        }
-    }
+    var currentVC: UIViewController
+    var closeButton  = UIButton(type: .system)
+    
+    weak var delegate: OnboardingContainerViewControllerDelegate?
+    
     
     //nib bundle gibi parametreler zorunlu olduğu için var
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -41,8 +49,16 @@ class OnboardingContainerViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        
+        setup()
+        style()
+        layout()
         super.viewDidLoad()
         
+       
+}
+    
+    private func setup() {
         view.backgroundColor = .systemPurple
         
         /*sen ekrana geldiğinde child da gelsin, sen kapandığında child da kapansın, sen döndüğünde child da dönsün. iOS bunu otomatik yönetsin.
@@ -67,7 +83,25 @@ class OnboardingContainerViewController: UIViewController {
         pageViewController.setViewControllers([pages.first!], direction: .forward, animated: false, completion: nil)
         currentVC = pages.first!
     }
-}
+    
+    private func style() {
+        
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.setTitle("Close", for: [])
+        closeButton.addTarget(self, action: #selector(closeTapped), for: .primaryActionTriggered)
+
+        view.addSubview(closeButton)
+        
+    }
+    private func layout() {
+        
+        NSLayoutConstraint.activate([
+            closeButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            closeButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor , multiplier: 2)
+        ])
+        
+    }
+    }
 
 // MARK: - UIPageViewControllerDataSource protokolü, kullanıcı sağa veya sola kaydırdığında "Sırada ne var?" sorusuna yanıt verir.
 extension OnboardingContainerViewController: UIPageViewControllerDataSource {
@@ -99,6 +133,17 @@ extension OnboardingContainerViewController: UIPageViewControllerDataSource {
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return pages.firstIndex(of: self.currentVC) ?? 0
     }
+}
+
+extension OnboardingContainerViewController {
+    
+    @objc func closeTapped(_ sender: UIButton) {
+        delegate?.DidFinishOnboarding()
+        
+        
+    }
+    
+    
 }
 
 
