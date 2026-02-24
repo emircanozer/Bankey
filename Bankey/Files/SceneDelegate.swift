@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         var window = UIWindow(windowScene: windowScene)
         
-        let rootVC = OnboardingViewController()
+        let rootVC = OnboardingContainerViewController()
         let navigationController = UINavigationController(rootViewController: rootVC)
         window.rootViewController = navigationController
         
