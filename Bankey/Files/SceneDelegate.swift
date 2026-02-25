@@ -6,10 +6,11 @@
 //sayfa geçişleri navigate işlemleri tab, gibi işlemler sceneden yönetiliyor
 
 import UIKit
-
-
 //sceneDelegate uygulamanın yöneticisi olduğu için butona basıldığında uygulama genelinde verilecek aksiyonu burada tanımladık burası belirliyor. extention olması kodların temiz olmasından dolayı,event olacak fonksiyonu burada tanımladık aşağıda da = self yaptık haberlşeme tamamlanması için
 //Login ekranı bir "olayı" (Event) duyurur, SceneDelegate ise bu olaya karşılık bir "aksiyon" (Action) alır.
+
+let appColor : UIColor = .systemTeal
+
 extension SceneDelegate: LoginViewControllerDelegate {
     func didLogin() {
         if LocalState.hasOnboarded {
@@ -48,6 +49,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let loginViewController = LoginViewController()
     let onboardingContainerViewController = OnboardingContainerViewController()
     let dummyViewController = DummyViewController()
+    let mainViewController =  MainViewController()
     
 
 
@@ -59,7 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         
-        var window = UIWindow(windowScene: windowScene)
+        let window = UIWindow(windowScene: windowScene)
         
         
         // protokollerin bağlanması için bu tanımlama şart !
@@ -68,7 +70,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         dummyViewController.logoutDelegate = self
         
         
-        let rootVC = loginViewController
+        //uygulama başladığında tabbar view ile karşılansın 
+        let rootVC = mainViewController
         let navigationController = UINavigationController(rootViewController: rootVC)
         window.rootViewController = navigationController
         
