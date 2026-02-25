@@ -5,7 +5,7 @@
 //  Created by Emircan Özer on 25.02.2026.
 //
 
-// projenin tek storyboard kısmı tableviewin headeri için zorunlu videoda ekranı size freeform yaptık height verdik file'S owneri bu sayfa yaptık geri kalan outlet ile sürükle bırak
+// projenin tek storyboard kısmı tableviewin headeri için zorunlu videoda ekranı size freeform yaptık height verdik file'S owner classını bu sayfa yaptık outleti sürükle bırak
 
 import UIKit
 
@@ -39,8 +39,6 @@ class AccountSummaryHeaderView: UIView {
             contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
             contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         }
-    
-    
     
     
 }
