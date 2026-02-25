@@ -36,6 +36,7 @@ extension AccountSummaryViewController {
         tableView.dataSource = self
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        //register zorunlu 
         tableView.register(AccountSummaryCell.self, forCellReuseIdentifier: AccountSummaryCell.reuseID)
             tableView.rowHeight = AccountSummaryCell.rowHeight
             tableView.tableFooterView = UIView()
