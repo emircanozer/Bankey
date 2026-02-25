@@ -50,6 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let onboardingContainerViewController = OnboardingContainerViewController()
     let dummyViewController = DummyViewController()
     let mainViewController =  MainViewController()
+    let accountSummaryViewController = AccountSummaryViewController()
     
 
 
@@ -70,8 +71,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         dummyViewController.logoutDelegate = self
         
         
-        //uygulama başladığında tabbar view ile karşılansın 
-        let rootVC = mainViewController
+        //uygulama başladığında tabbar view ile karşılansın
+        let rootVC = accountSummaryViewController
         let navigationController = UINavigationController(rootViewController: rootVC)
         window.rootViewController = navigationController
         
