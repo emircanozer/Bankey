@@ -14,7 +14,7 @@ let appColor : UIColor = .systemTeal
 extension SceneDelegate: LoginViewControllerDelegate {
     func didLogin() {
         if LocalState.hasOnboarded {
-            setRootViewController(dummyViewController)
+            setRootViewController(mainViewController)
         } else {
             setRootViewController(onboardingContainerViewController)
         }
@@ -25,7 +25,7 @@ extension SceneDelegate: LoginViewControllerDelegate {
 extension SceneDelegate : OnboardingContainerViewControllerDelegate {
     func DidFinishOnboarding() {
         LocalState.hasOnboarded = true
-        setRootViewController(dummyViewController)
+        setRootViewController(mainViewController)
     }
     
     
@@ -72,14 +72,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         //uygulama başladığında tabbar view ile karşılansın
-        let rootVC = accountSummaryViewController
+        let rootVC = mainViewController
+        rootVC.setStatusBar()
+        
+        
         let navigationController = UINavigationController(rootViewController: rootVC)
         window.rootViewController = navigationController
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.shadowColor = .clear
+        appearance.backgroundColor = appColor
+        navigationController.navigationBar.isTranslucent = false
+        navigationController.navigationBar.scrollEdgeAppearance = appearance
+        navigationController.navigationBar.standardAppearance = appearance
+        navigationController.navigationBar.compactAppearance = appearance
+        
+        
+        
         
         
         self.window = window
         window.makeKeyAndVisible()
         window.backgroundColor = .systemBackground
+        
         
   
         

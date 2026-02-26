@@ -3,7 +3,8 @@
 //  Bankey
 //
 //  Created by Emircan Özer on 26.02.2026.
-//
+//dolar işaretini ve kuruş kısmını daha küçük, ana parayı ise daha büyük ve virgüllü bir şekilde ekrana basmaktır.
+//içindeki en önemli iş, sayıyı tam kısım (dolar) ve ondalık kısım (sent) olarak ikiye bölmektir.
 
 import UIKit
 
