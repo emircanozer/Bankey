@@ -11,12 +11,28 @@ import UIKit
 //tableviewin içi fonksiyonlar ve diğer gerekliler acsumviewcon içinde tanımlanıyor incele
 class AccountSummaryCell : UITableViewCell {
     
+    
+    //String? rawValue özelliği sayesinde Banking.rawValue dediğinde sana "Banking" metnini verir. Bu metni direkt ekrana basmak için kullanırız.enum sayesinde yazarken hata yapma olasığımız 0 oluyor kodlar daha temiz buradan direk erişilebiliyor Uygulamanın içinde dolaşacak "hesap türlerini" birer sabit haline getirdik.
+    enum AccountType: String {
+        case Banking
+        case CreditCard
+        case Investment
+    }
+    
+    /* Bir hücrenin içinde 10 tane label olabilir. Bunları hücreye tek tek (name, date, amount...) göndermek yerine, hepsini bir ViewModel paketine koyup tek seferde teslim ediyoruz. zaten viewcontroller da kullanırken senden bu 2 veri türünü bekliyor */
+    struct ViewModel {
+        let accountType: AccountType
+        let accountName: String
+    }
+
+    let viewModel: ViewModel? = nil
+    
+    
     let typeLabel = UILabel()
     let underlineView = UIView()
     static let reuseID = "AccountSummaryCell"
     static let rowHeight: CGFloat = 112
     let nameLabel = UILabel()
-    
     let balanceStackView = UIStackView()
     let balanceLabel = UILabel()
     let balanceAmountLabel = UILabel()
@@ -133,3 +149,29 @@ extension AccountSummaryCell {
     
     
 }
+
+/* gelen senaryoya (ViewModel) göre kostüm değiştirir.*/
+extension AccountSummaryCell {
+    //Bu metod, hücrenin "giyinme odasıdır".
+    //vm paketine bakar ve "Benim tipim Investment mış, o zaman mor olayım" der.
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        nameLabel.text = vm.accountName
+        
+        //enumdaki tipe göre renk ve yazı seçiliyor
+        switch vm.accountType {
+        case .Banking:
+            underlineView.backgroundColor = .systemTeal
+            balanceLabel.text = "Current balance"
+        case .CreditCard:
+            underlineView.backgroundColor = .systemOrange
+            balanceLabel.text = "Current balance"
+        case .Investment:
+            underlineView.backgroundColor = .systemPurple
+            balanceLabel.text = "Value"
+        }
+    }
+}
+
+//"Yeni bir hesap tipi geldi: Altın Hesabı" dediklerinde, tüm uygulamayı değiştirmeyeceksin. Sadece Enum'a .Gold ekleyip, configure içine bir case .Gold rengi eklemen yeterli olacak. İşte profesyonel kod budur!
