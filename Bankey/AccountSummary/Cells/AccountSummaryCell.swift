@@ -17,12 +17,19 @@ class AccountSummaryCell : UITableViewCell {
         case Banking
         case CreditCard
         case Investment
+        
     }
     
     /* Bir hücrenin içinde 10 tane label olabilir. Bunları hücreye tek tek (name, date, amount...) göndermek yerine, hepsini bir ViewModel paketine koyup tek seferde teslim ediyoruz. zaten viewcontroller da kullanırken senden bu 2 veri türünü bekliyor */
     struct ViewModel {
         let accountType: AccountType
         let accountName: String
+        let balance: Decimal // new
+        
+        var balanceAsAttributedString: NSAttributedString {
+                return CurrencyFormatter().makeAttributedCurrency(balance)
+            }
+      
     }
 
     let viewModel: ViewModel? = nil
@@ -87,7 +94,7 @@ extension AccountSummaryCell {
 
         balanceAmountLabel.translatesAutoresizingMaskIntoConstraints = false
         balanceAmountLabel.textAlignment = .right
-        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "929,466", cents: "23")
+        balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "XXX,XXX", cents: "XX")
 
 
         balanceStackView.addArrangedSubview(balanceLabel)
@@ -158,6 +165,7 @@ extension AccountSummaryCell {
         
         typeLabel.text = vm.accountType.rawValue
         nameLabel.text = vm.accountName
+        balanceAmountLabel.attributedText = vm.balanceAsAttributedString
         
         //enumdaki tipe göre renk ve yazı seçiliyor
         switch vm.accountType {
