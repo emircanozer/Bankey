@@ -32,7 +32,7 @@ extension SceneDelegate : OnboardingContainerViewControllerDelegate {
 }
 
 extension SceneDelegate: LogoutDelegate {
-    func didLogout() {
+   @objc func didLogout() {
         setRootViewController(loginViewController)
     }
 }
@@ -72,7 +72,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         //uygulama başladığında tabbar view ile karşılansın
-        let rootVC = mainViewController
+        let rootVC = loginViewController
         rootVC.setStatusBar()
         
         
@@ -86,6 +86,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         navigationController.navigationBar.scrollEdgeAppearance = appearance
         navigationController.navigationBar.standardAppearance = appearance
         navigationController.navigationBar.compactAppearance = appearance
+        registerForNotifications()
         
         
         
@@ -98,7 +99,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
   
         
+        
     }
+    
+    //"Ben bu radyo kanalını dinlemek istiyorum" diyor ismi zaten diğer sayfada tanımladık .logout
+    //Uygulama açılır açılmaz AppDelegate "Logout" kanalını dinlemeye başlar.
+    private func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogout), name: .logout, object: nil)
+    }
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
