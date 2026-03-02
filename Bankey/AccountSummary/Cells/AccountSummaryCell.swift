@@ -8,18 +8,19 @@
 import Foundation
 import UIKit
 
+
+//String? rawValue özelliği sayesinde Banking.rawValue dediğinde sana "Banking" metnini verir. Bu metni direkt ekrana basmak için kullanırız.enum sayesinde yazarken hata yapma olasığımız 0 oluyor kodlar daha temiz buradan direk erişilebiliyor Uygulamanın içinde dolaşacak "hesap türlerini" birer sabit haline getirdik.
+enum AccountType: String ,Codable{
+    case Banking
+    case CreditCard
+    case Investment
+    
+}
+
 //tableviewin içi fonksiyonlar ve diğer gerekliler acsumviewcon içinde tanımlanıyor incele
 class AccountSummaryCell : UITableViewCell {
     
-    
-    //String? rawValue özelliği sayesinde Banking.rawValue dediğinde sana "Banking" metnini verir. Bu metni direkt ekrana basmak için kullanırız.enum sayesinde yazarken hata yapma olasığımız 0 oluyor kodlar daha temiz buradan direk erişilebiliyor Uygulamanın içinde dolaşacak "hesap türlerini" birer sabit haline getirdik.
-    enum AccountType: String {
-        case Banking
-        case CreditCard
-        case Investment
-        
-    }
-    
+
     /* Bir hücrenin içinde 10 tane label olabilir. Bunları hücreye tek tek (name, date, amount...) göndermek yerine, hepsini bir ViewModel paketine koyup tek seferde teslim ediyoruz. zaten viewcontroller da kullanırken senden bu 2 veri türünü bekliyor */
     struct ViewModel {
         let accountType: AccountType
