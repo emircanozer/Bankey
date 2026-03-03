@@ -173,7 +173,8 @@ extension AccountSummaryViewController {
             case .success(let profile):         // diğer sayfada tanımladığımız fetch fonk @escaping  result type içindeki success ve failure içinde gelen kargoyu burada kullanıyoruz
                 self.profile = profile
             case .failure(let error):
-                print(error.localizedDescription)
+                self.displayError(error)
+           
             }
             group.leave()  // her iş bloğunun başına ve sonuna enter ve leave toplu kullanım da notify da yapılır queqe main thread for ui seçimi relaod data hepsinde kullanılan fonksiyon olduğu için yazıldı
         }
@@ -184,7 +185,7 @@ extension AccountSummaryViewController {
                     case .success(let accounts):
                         self.accounts = accounts
                     case .failure(let error):
-                        print(error.localizedDescription)
+                        self.displayError(error)
                     }
             group.leave()
                 }
@@ -217,6 +218,31 @@ extension AccountSummaryViewController {
                                           balance: $0.amount)
          }
      }
+    
+    //hata yönetimlerinde enum kullanmak standarttır kullanış şekli ise switch case değişken verip fonksiyondan da gönderebiliriz mesajları burdaki gibi
+    private func displayError(_ error: NetworkError) {
+        let title: String
+        let message: String
+        switch error {
+        case .serverError:
+            title = "Server Error"
+            message = "We could not process your request. Please try again."
+        case .decodingError:
+            title = "Network Error"
+            message = "Ensure you are connected to the internet. Please try again."
+        }
+        self.showErrorAlert(title: title, message: message)
+    }
+    
+    private func showErrorAlert(title : String, message : String) {
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 
