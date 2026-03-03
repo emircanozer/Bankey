@@ -54,6 +54,12 @@ struct Account: Codable {
     let name: String
     let amount: Decimal
     let createdDateTime: Date
+    
+    static func makeSkeleton() -> Account {
+          return Account(id: "1", type: .Banking, name: "Account name", amount: 0.0, createdDateTime: Date())
+      }
+    
+    
 }
 
 // result type otomatik olarak ya succes ya da failure dönüyor success olursa tanımladğımız  account structu failre olursa tanımladığımız network error dönsün dedik
