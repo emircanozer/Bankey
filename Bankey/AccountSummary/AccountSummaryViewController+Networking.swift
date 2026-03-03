@@ -35,7 +35,7 @@ extension AccountSummaryViewController {
                 guard let data = data, error == nil else {
                     completion(.failure(.serverError))
                     return
-                }
+                }                   //completion ile tanımlanananlar yukarıda tanımladığımız result type da verdiğimiz structların caseleri . ile erişiliyor
                 
                 do {
                     let profile = try JSONDecoder().decode(Profile.self, from: data)
@@ -47,7 +47,7 @@ extension AccountSummaryViewController {
         }.resume()
     }
 }
-
+//bu tipe çevirecez 
 struct Account: Codable {
     let id: String
     let type: AccountType
@@ -56,17 +56,19 @@ struct Account: Codable {
     let createdDateTime: Date
 }
 
+// result type otomatik olarak ya succes ya da failure dönüyor success olursa tanımladğımız  account structu failre olursa tanımladığımız network error dönsün dedik
 extension AccountSummaryViewController {
     func fetchAccounts(forUserId userId: String, completion: @escaping (Result<[Account],NetworkError>) -> Void) {
         let url = URL(string: "https://fierce-retreat-36855.herokuapp.com/bankey/profile/\(userId)/accounts")!
 
         URLSession.shared.dataTask(with: url) { data, response, error in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { // guard ile datayı erroru aldık
                 guard let data = data, error == nil else {
                     completion(.failure(.serverError))
                     return
                 }
-                
+                //completion ile tanımlanananlar yukarıda tanımladığımız result type da verdiğimiz structların caseleri . ile erişiliyor
+               
                 do {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .iso8601

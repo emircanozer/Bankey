@@ -38,15 +38,12 @@ extension AccountSummaryViewController {
         setupTableView()
         setupTableHeaderView()
         setupNavigationBar()
-        //fetchAccounts()
-        fetchDataAndLoadViews()
+        fetchData()
         
         
     }
     
-    func setupNavigationBar() {
-            navigationItem.rightBarButtonItem = logoutBarButtonItem
-        }
+
     
     private func setupTableView() {
         tableView.backgroundColor = appColor
@@ -76,6 +73,11 @@ extension AccountSummaryViewController {
         
         tableView.tableHeaderView = headerView
     }
+    
+    func setupNavigationBar() {
+            navigationItem.rightBarButtonItem = logoutBarButtonItem
+        }
+    
     
     
     
@@ -115,65 +117,46 @@ extension AccountSummaryViewController: UITableViewDelegate {
 
 //array dizine verileri ekliyoruz
 extension AccountSummaryViewController {
-    private func         fetchAccounts() {
-        
-        
-        let savings = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                            accountName: "Basic Savings",
-                                                        balance: 929466.23)
-        let chequing = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                    accountName: "No-Fee All-In Chequing",
-                                                    balance: 17562.44)
-        let visa = AccountSummaryCell.ViewModel(accountType: .CreditCard,
-                                                       accountName: "Visa Avion Card",
-                                                       balance: 412.83)
-        let masterCard = AccountSummaryCell.ViewModel(accountType: .CreditCard,
-                                                       accountName: "Student Mastercard",
-                                                       balance: 50.83)
-        let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
-                                                       accountName: "Tax-Free Saver",
-                                                       balance: 2000.00)
-        let investment2 = AccountSummaryCell.ViewModel(accountType: .Investment,
-                                                       accountName: "Growth Fund",
-                                                       balance: 15000.00)
-
-        accountCellViewModels.append(savings)
-        accountCellViewModels.append(chequing)
-        accountCellViewModels.append(visa)
-        accountCellViewModels.append(masterCard)
-        accountCellViewModels.append(investment1)
-        accountCellViewModels.append(investment2)
-        
-    }
+    
 }
 
-// MARK: - Networking
+/*
+ //"Tüm bu farklı işler (profil çekme, hesapları çekme vb.) bitsin, hepsinin bittiğinden emin olduğumda tek bir seferde ekranı güncelleyeyim" demeni sağlayan bir "senkronizasyon" aracıdır. par.a parça yüklenmesin diye  dispatch group
+  .enter(): Her bir yemek siparişi için mutfağa bir işaret bırakır (1, 2, 3...).
+ .leave(): Her yemek hazırlandığında mutfak o işareti siler.
+ .notify(): Masadaki tüm yemekler hazır olduğunda (işaretler sıfırlandığında), garson tepsiyi masaya getirir.*/
 extension AccountSummaryViewController {
-    private func fetchDataAndLoadViews() {
-        
+    private func fetchData() {
+        let group = DispatchGroup()
+        group.enter()
         fetchProfile(forUserId: "1") { result in
             switch result {
-            case .success(let profile):
+            case .success(let profile):         // diğer sayfada tanımladığımız fetch fonk @escaping  result type içindeki success ve failure içinde gelen kargoyu burada kullanıyoruz
                 self.profile = profile
                 self.configureTableHeaderView(with: profile)
-                self.tableView.reloadData()
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            group.leave()  // her iş bloğunun başına ve sonuna enter ve leave toplu kullanım da notify da yapılır queqe main thread for ui seçimi relaod data hepsinde kullanılan fonksiyon olduğu için yazıldı
         }
 
+        group.enter()
         fetchAccounts(forUserId: "1") { result in
                     switch result {
                     case .success(let accounts):
                         self.accounts = accounts
                         self.configureTableCells(with: accounts)
-                        self.tableView.reloadData()
                     case .failure(let error):
                         print(error.localizedDescription)
                     }
+            group.leave()
                 }
+        
+        group.notify(queue: .main) {
+            self.tableView.reloadData()
+        }
     }
-    
+    // işleyiş olarak her fonk parametre bekliyor ondan ona ondan ona parametre vere vere taşınıyor
     private func configureTableHeaderView(with profile: Profile) {
         let vm = AccountSummaryHeaderView.ViewModel(welcomeMessage: "Good morning,",
                                                     name: profile.firstName,

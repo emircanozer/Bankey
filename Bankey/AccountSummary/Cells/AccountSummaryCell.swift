@@ -6,10 +6,10 @@
 //
 
 import Foundation
-import UIKit
+import UIKit 
 
 
-//String? rawValue özelliği sayesinde Banking.rawValue dediğinde sana "Banking" metnini verir. Bu metni direkt ekrana basmak için kullanırız.enum sayesinde yazarken hata yapma olasığımız 0 oluyor kodlar daha temiz buradan direk erişilebiliyor Uygulamanın içinde dolaşacak "hesap türlerini" birer sabit haline getirdik.
+//String? rawValue özelliği sayesinde Banking.rawValue dediğinde sana "Banking" metnini verir. Bu metni direkt ekrana basmak için kullanırız.enum sayesinde yazarken hata yapma olasığımız 0 oluyor kodlar daha temiz buradan direk erişilebiliyor Uygulamanın içinde dolaşacak "hesap türlerini" birer sabit haline getirdik. kullanıcılar da bu enumu kllanacak
 enum AccountType: String ,Codable{
     case Banking
     case CreditCard
