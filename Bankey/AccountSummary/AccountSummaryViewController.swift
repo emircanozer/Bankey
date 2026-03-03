@@ -20,6 +20,7 @@ class AccountSummaryViewController: UIViewController {
     
     var tableView = UITableView()
     var headerView = AccountSummaryHeaderView(frame: .zero)
+    let refreshControl = UIRefreshControl()
     
     lazy var logoutBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutTapped))
@@ -38,7 +39,9 @@ extension AccountSummaryViewController {
         setupTableView()
         setupTableHeaderView()
         setupNavigationBar()
+        setupRefreshControl()
         fetchData()
+        
         
         
     }
@@ -79,6 +82,15 @@ extension AccountSummaryViewController {
         }
     
     
+    private func setupRefreshControl() {
+        refreshControl.tintColor = appColor
+        refreshControl.addTarget(self, action: #selector(refreshContent), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+    
+    
+    
+    
     
     
     
@@ -89,6 +101,12 @@ extension AccountSummaryViewController {
     @objc func logoutTapped(sender: UIButton) {
         NotificationCenter.default.post(name: .logout, object: nil)
         
+    }
+}
+
+extension AccountSummaryViewController {
+    @objc func refreshContent() {
+            fetchData()
     }
 }
 
@@ -154,6 +172,7 @@ extension AccountSummaryViewController {
         
         group.notify(queue: .main) {
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     // işleyiş olarak her fonk parametre bekliyor ondan ona ondan ona parametre vere vere taşınıyor
