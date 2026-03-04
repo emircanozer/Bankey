@@ -20,6 +20,9 @@ class AccountSummaryViewController: UIViewController {
     
     var tableView = UITableView()
     var headerView = AccountSummaryHeaderView(frame: .zero)
+    //networking DI için(profilemanager sayfası) protokol türünden profileManager sınıfı instancesi
+    var profileManager: ProfileManageable = ProfileManager()
+
     let refreshControl = UIRefreshControl()
     var isLoaded = false
     
@@ -168,7 +171,7 @@ extension AccountSummaryViewController {
     private func fetchData() {
         let group = DispatchGroup()
         group.enter()
-        fetchProfile(forUserId: "1") { result in
+        profileManager.fetchProfile(forUserId: "1") { result in
             switch result {
             case .success(let profile):         // diğer sayfada tanımladığımız fetch fonk @escaping  result type içindeki success ve failure içinde gelen kargoyu burada kullanıyoruz
                 self.profile = profile
